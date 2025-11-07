@@ -28,7 +28,7 @@
     .wrapper {
       display: flex;
       flex: 1;
-      min-height: 100vh; /* asegura que siempre llene la pantalla */
+      min-height: 100vh;
       width: 100%;
     }
 
@@ -37,10 +37,10 @@
       background: #fff;
       border-right: 1px solid #ddd;
       padding: 1rem;
-      width: 250px; /* ancho fijo */
-      min-height: 100vh; /* siempre llena la pantalla */
-      overflow-y: auto; /* scroll interno si es necesario */
-      flex-shrink: 0; /* no se encoge */
+      width: 250px;
+      min-height: 100vh;
+      overflow-y: auto;
+      flex-shrink: 0;
     }
 
     .sidebar .nav-link {
@@ -80,10 +80,6 @@
       align-items: center;
     }
 
-    .topbar .form-control {
-      border-radius: 12px;
-    }
-
     .profile-img {
       width: 40px;
       height: 40px;
@@ -101,15 +97,13 @@
       color: #6c757d;
     }
 
-    /* Contenido principal */
     main {
-      flex: 1; /* ocupa todo el espacio restante */
-      overflow-y: auto; /* scroll si contenido es largo */
+      flex: 1;
+      overflow-y: auto;
       padding: 1rem;
-      min-height: 100vh; /* asegura altura mínima igual a la pantalla */
+      min-height: 100vh;
     }
 
-    /* Ajuste responsive */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -138,23 +132,28 @@
       const toggleBtn = document.querySelector('.btn-outline-primary');
       const sidebar = document.querySelector('.sidebar');
 
-      toggleBtn.addEventListener('click', function() {
-        sidebar.classList.toggle('show');
-      });
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('show');
+        });
+      }
     });
 
+    // Cerrar sesión
     async function cerrar_sesion() {
       try {
-        let respuesta = await fetch(base_url+'src/controller/login.php?tipo=cerrar_sesion',{
-          method: 'POST', 
+        let respuesta = await fetch(base_url + 'src/controller/login.php?tipo=cerrar_sesion', {
+          method: 'POST',
           mode: 'cors',
-          cache:'no-cache',
+          cache: 'no-cache',
         });
         let json = await respuesta.json();
         if (json.status) {
-          location.replace(base_url+'login');
+          location.replace(base_url + 'login');
+        } else {
+          alert("No se pudo cerrar sesión correctamente.");
         }
-      } catch(e) {
+      } catch (e) {
         console.error(e);
       }
     }
@@ -163,9 +162,7 @@
 <body>
 
   <div class="wrapper">
-   
-
-    <!-- Main content -->
+    <!-- Contenido principal -->
     <main>
       <!-- Topbar -->
       <div class="topbar">
@@ -192,14 +189,20 @@
 
           <div class="d-flex align-items-center gap-2">
             <img src="https://i.pravatar.cc/40?img=12" alt="User" class="profile-img">
-            <div class="d-none d-sm-block">
+            <div class="d-none d-sm-block text-end">
               <div class="username"><?= htmlspecialchars($nombreCompleto) ?></div>
               <div class="user-role"><?= htmlspecialchars($rol) ?></div>
             </div>
           </div>
+
+          <!-- 🔴 Botón de cerrar sesión -->
+          <button class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1" onclick="cerrar_sesion()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span class="d-none d-sm-inline">Cerrar sesión</span>
+          </button>
         </div>
       </div>
 
       <!-- Contenido principal -->
       <div class="content py-4">
-        
+       
