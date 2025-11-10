@@ -5,7 +5,7 @@ class vistaModelo
     
     protected static function obtener_vista($vista)
     {
-        $palabras_permitidas = ['inicio','peliculas','nueva-peli','editar-pelicula','usuario','nuevo-usuario','editar-usuario','cliente','nuevo-cliente','editar-cliente','token','nuevo-token','editar-token'];
+        $palabras_permitidas = ['inicio','peliculas','nueva-peli','editar-pelicula','usuario','nuevo-usuario','editar-usuario','cliente','nuevo-cliente','editar-cliente','token','nuevo-token','editar-token','api-request'];
 
     if (!isset($_SESSION['sesion_ventas_id'])) {
         return "login";

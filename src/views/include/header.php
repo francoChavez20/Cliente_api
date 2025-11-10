@@ -51,7 +51,7 @@
 
     .sidebar .nav-link.active {
       background: #3b82f6;
-      color: #fff;
+      color: #ffffffff;
     }
 
     .sidebar .nav-link:hover {
@@ -172,6 +172,12 @@
           </button>
           <i class="bi bi-diagram-2 fs-4 text-primary"></i>
           <span class="fw-bold">Clientes</span>
+
+           <a href="<?php echo BASE_URL;?>api-request">
+                    <button type="button" class="btn btn-primary">
+                        <i class="fa fa-plus"></i> Cliente Api
+                    </button>
+                </a>
         </div>
 
         <div class="d-flex align-items-center gap-3">
