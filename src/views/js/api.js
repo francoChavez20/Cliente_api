@@ -17,7 +17,7 @@ async function cargarToken() {
         if (json.status) {
             document.getElementById('token').value = json.data.token;
         } else {
-            mostrarAlerta("Advertencia", "No se encontró token guardado", "warning");
+            mostrarAlerta("Advertencia", json.msg || "No se encontró token guardado", "warning");
         }
     } catch (error) {
         console.error("Error cargando token:", error);
@@ -29,7 +29,9 @@ async function cargarToken() {
 async function llamar_api() {
     const formulario = document.getElementById('frmApi');
     const datos = new FormData(formulario);
-    let ruta_api = document.getElementById('ruta_api').value;
+    const ruta_api = document.getElementById('ruta_api').value;
+    const contenido = document.getElementById('contenido');
+    contenido.innerHTML = "";
 
     try {
         const respuesta = await fetch(ruta_api, {
@@ -39,10 +41,17 @@ async function llamar_api() {
         });
 
         const json = await respuesta.json();
-        const contenido = document.getElementById('contenido');
-        contenido.innerHTML = "";
+        console.log("Respuesta API:", json);
 
-        if (json.status && json.contenido.length > 0) {
+        // 🟢 Si el servidor devuelve 'msg', se muestra tal cual.
+        if (json.msg && json.msg.trim() !== "") {
+            // Si el estado es falso, alerta tipo error
+            const tipo = json.status ? "success" : "error";
+            mostrarAlerta("Mensaje del servidor", json.msg, tipo);
+        }
+
+        // 🟢 Si hay películas en el contenido, se muestran
+        if (json.status && json.contenido && json.contenido.length > 0) {
             let contador = 0;
             json.contenido.forEach(peli => {
                 contador++;
@@ -58,20 +67,14 @@ async function llamar_api() {
                         <td>${peli.genero}</td>
                     </tr>`;
             });
-        } 
-        else if (json.msg && json.msg.includes("token inválido")) {
-            mostrarAlerta("Token inválido", "Tu token no es válido o ha expirado", "error");
-            contenido.innerHTML = `<tr><td colspan="8">Token inválido o expirado.</td></tr>`;
-        } 
-        else {
-            contenido.innerHTML = `<tr><td colspan="8">${json.msg || 'No se encontraron películas.'}</td></tr>`;
-            mostrarAlerta("Sin resultados", "No se encontraron películas con los filtros dados", "info");
+        } else if (!json.status && (!json.contenido || json.contenido.length === 0)) {
+            // 🟠 Si no hay películas, mostrar mensaje del servidor o por defecto
+            contenido.innerHTML = `<tr><td colspan="8">${json.msg || 'Sin resultados.'}</td></tr>`;
         }
 
     } catch (error) {
         console.error("Error al conectar con la API:", error);
-        document.getElementById('contenido').innerHTML =
-            `<tr><td colspan="8">⚠️ Error de conexión con el servidor.</td></tr>`;
+        contenido.innerHTML = `<tr><td colspan="8">⚠️ Error de conexión con el servidor.</td></tr>`;
         mostrarAlerta("Error", "No se pudo conectar con la API o el servidor no responde", "error");
     }
 }
