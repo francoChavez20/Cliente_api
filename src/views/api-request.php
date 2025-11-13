@@ -124,7 +124,7 @@
     <h1>🎬 Buscador de Películas</h1>
 
     <div class="api-url">
-      <input type="text" id="ruta_api" value="http://localhost:8888/peliculas/src/controller/api-request.php?tipo=verPeliculasApiByNombre" hidden>
+      <input type="text" id="ruta_api" value="https://peli-franco.estudiojuridico.com.pe/src/controller/api-request.php?tipo=verPeliculasApiByNombre" hidden>
     </div>
 
     <form id="frmApi">
